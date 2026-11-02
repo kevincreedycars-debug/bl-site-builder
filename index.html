@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Backlink Studio — operations dashboard</title>
+    <meta name="description" content="Static operations dashboard for a backlink and content portfolio: sites, content pipeline, link inventory, central email and citations." />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231b496b'/%3E%3Cpath d='M9 21V11h4l3 6 3-6h4v10' stroke='%23fff' stroke-width='2.4' fill='none' stroke-linejoin='round'/%3E%3C/svg%3E" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to the numbers</a>
+
+    <header class="top">
+      <div class="top-id">
+        <span class="mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="22" height="22" focusable="false">
+            <path d="M5 18V6h4l3 7 3-7h4v12" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+          </svg>
+        </span>
+        <span>
+          <strong id="workspace-name">Backlink Studio</strong>
+          <small id="workspace-tagline">Loading the files this page is built from…</small>
+        </span>
+      </div>
+
+      <div class="top-state" id="top-state">
+        <span class="chip chip-unknown" id="data-age">Data age unknown</span>
+        <span class="chip chip-unknown" id="attention-total">Attention not yet calculated</span>
+      </div>
+    </header>
+
+    <nav class="tabs" aria-label="Sections">
+      <a href="#/overview" data-view="overview">Overview</a>
+      <a href="#/sites" data-view="sites">Sites</a>
+      <a href="#/content" data-view="content">Content</a>
+      <a href="#/backlinks" data-view="backlinks">Backlinks</a>
+      <a href="#/email" data-view="email">Email</a>
+      <a href="#/eeat" data-view="eeat">Citations</a>
+      <a href="#/runs" data-view="runs">Runs</a>
+      <a href="#/harness" data-view="harness">Harness</a>
+    </nav>
+
+    <main id="main" tabindex="-1">
+      <noscript>
+        <p class="notice notice-high">
+          This page draws itself from the files in <code>data/</code> using a module script. With scripting
+          turned off nothing can be read, so the numbers cannot be shown rather than being shown as zero.
+        </p>
+      </noscript>
+      <div id="app" aria-live="polite">
+        <p class="loading">Reading the files…</p>
+      </div>
+    </main>
+
+    <footer class="foot">
+      <p>
+        Every number here is a count of rows in a file in <code>data/</code>, and each one is recomputable by
+        hand from that file. A missing file is reported as missing, never as zero.
+      </p>
+      <p id="footer-sources"></p>
+      <p class="foot-small">
+        No build step, no dependency, no server state. Opened from disk or served over HTTP, it reads the same
+        files.
+      </p>
+    </footer>
+
+    <script type="module" src="script.js"></script>
+  </body>
+</html>

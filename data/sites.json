@@ -1,0 +1,140 @@
+{
+  "_meta": {
+    "as_of": "2026-11-02T09:15:00Z",
+    "source": "seed",
+    "produced_by": "seed-fixtures@v1",
+    "note": "One row per site module. status is what the last authenticated check found, not what was configured."
+  },
+  "sites": [
+    {
+      "id": "site-atlas",
+      "name": "Atlas Workshop",
+      "domain": "atlas-workshop.example",
+      "niche": "Woodworking and small-space DIY",
+      "status": "connected",
+      "wordpress": {
+        "version": "6.6.2",
+        "plugin_version": "0.4.1",
+        "plugin_channel": "stable",
+        "rest_ok": true,
+        "rest_latency_ms": 240
+      },
+      "content": { "published": 214, "drafted": 3, "queued_30d": 8 },
+      "links": { "listed": 26, "placed": 71, "live": 68, "expired": 3, "median_price": 145 },
+      "metrics": { "dr": 41, "referring_domains": 512, "indexed_pages": 231, "spam_score": 2 },
+      "citations": { "verified": 11, "expected": 12 },
+      "email": { "domain_id": "dom-northmail", "mailboxes": 3 },
+      "trend_links_live": [48, 51, 53, 56, 58, 59, 62, 63, 65, 66, 67, 68],
+      "last_sync": "2026-11-02T08:40:00Z",
+      "checks": [
+        { "id": "rest", "label": "REST read", "state": "pass", "detail": "GET /wp-json/wp/v2/posts returned 200 in 240 ms" },
+        { "id": "plugin", "label": "Upload plugin", "state": "pass", "detail": "0.4.1 responding, matches channel" },
+        { "id": "index", "label": "Indexation", "state": "pass", "detail": "231 of 231 published pages indexed" }
+      ]
+    },
+    {
+      "id": "site-harbor",
+      "name": "Harbor & Pine",
+      "domain": "harbor-pine.example",
+      "niche": "Coastal home decor",
+      "status": "connected",
+      "wordpress": {
+        "version": "6.5.5",
+        "plugin_version": "0.3.7",
+        "plugin_channel": "stable",
+        "rest_ok": true,
+        "rest_latency_ms": 610
+      },
+      "content": { "published": 128, "drafted": 2, "queued_30d": 4 },
+      "links": { "listed": 18, "placed": 44, "live": 41, "expired": 3, "median_price": 120 },
+      "metrics": { "dr": 33, "referring_domains": 274, "indexed_pages": 119, "spam_score": 4 },
+      "citations": { "verified": 7, "expected": 12 },
+      "email": { "domain_id": "dom-northmail", "mailboxes": 2 },
+      "trend_links_live": [30, 31, 33, 35, 36, 37, 38, 39, 40, 40, 41, 41],
+      "last_sync": "2026-11-01T21:05:00Z",
+      "checks": [
+        { "id": "rest", "label": "REST read", "state": "pass", "detail": "200 in 610 ms, slower than the 400 ms budget" },
+        { "id": "plugin", "label": "Upload plugin", "state": "warn", "detail": "0.3.7 running, 0.4.1 available" },
+        { "id": "index", "label": "Indexation", "state": "warn", "detail": "119 of 128 published pages indexed, 9 missing" }
+      ]
+    },
+    {
+      "id": "site-summit",
+      "name": "Summit Ledger",
+      "domain": "summit-ledger.example",
+      "niche": "Small business finance",
+      "status": "connected",
+      "wordpress": {
+        "version": "6.6.2",
+        "plugin_version": "0.4.1",
+        "plugin_channel": "stable",
+        "rest_ok": true,
+        "rest_latency_ms": 180
+      },
+      "content": { "published": 96, "drafted": 4, "queued_30d": 6 },
+      "links": { "listed": 31, "placed": 58, "live": 56, "expired": 2, "median_price": 210 },
+      "metrics": { "dr": 48, "referring_domains": 631, "indexed_pages": 94, "spam_score": 1 },
+      "citations": { "verified": 12, "expected": 12 },
+      "email": { "domain_id": "dom-ledgerpost", "mailboxes": 2 },
+      "trend_links_live": [38, 40, 43, 45, 47, 49, 50, 52, 53, 54, 55, 56],
+      "last_sync": "2026-11-02T08:41:00Z",
+      "checks": [
+        { "id": "rest", "label": "REST read", "state": "pass", "detail": "200 in 180 ms" },
+        { "id": "plugin", "label": "Upload plugin", "state": "pass", "detail": "0.4.1 responding" },
+        { "id": "index", "label": "Indexation", "state": "pass", "detail": "94 of 96 indexed, 2 are new and inside the window" }
+      ]
+    },
+    {
+      "id": "site-verdant",
+      "name": "Verdant Table",
+      "domain": "verdant-table.example",
+      "niche": "Seasonal cooking",
+      "status": "error",
+      "wordpress": {
+        "version": "6.4.3",
+        "plugin_version": "0.2.9",
+        "plugin_channel": "stable",
+        "rest_ok": false,
+        "rest_latency_ms": null
+      },
+      "content": { "published": 67, "drafted": 1, "queued_30d": 2 },
+      "links": { "listed": 9, "placed": 22, "live": 18, "expired": 4, "median_price": 95 },
+      "metrics": { "dr": 27, "referring_domains": 143, "indexed_pages": 61, "spam_score": 9 },
+      "citations": { "verified": 4, "expected": 12 },
+      "email": { "domain_id": "dom-vernmail", "mailboxes": 1 },
+      "trend_links_live": [21, 21, 20, 21, 20, 19, 19, 19, 18, 18, 18, 18],
+      "last_sync": "2026-10-28T11:22:00Z",
+      "checks": [
+        { "id": "rest", "label": "REST read", "state": "fail", "detail": "401 from /wp-json/wp/v2/posts - application password revoked 28 Oct" },
+        { "id": "plugin", "label": "Upload plugin", "state": "fail", "detail": "No response, plugin cannot be reached" },
+        { "id": "index", "label": "Indexation", "state": "warn", "detail": "61 of 67 indexed, 6 dropped since 20 Oct" }
+      ]
+    },
+    {
+      "id": "site-kestrel",
+      "name": "Kestrel Audio",
+      "domain": "kestrel-audio.example",
+      "niche": "Studio and field recording",
+      "status": "pending",
+      "wordpress": {
+        "version": null,
+        "plugin_version": null,
+        "plugin_channel": "stable",
+        "rest_ok": false,
+        "rest_latency_ms": null
+      },
+      "content": { "published": 0, "drafted": 0, "queued_30d": 3 },
+      "links": { "listed": 0, "placed": 0, "live": 0, "expired": 0, "median_price": 0 },
+      "metrics": { "dr": 0, "referring_domains": 0, "indexed_pages": 0, "spam_score": 0 },
+      "citations": { "verified": 0, "expected": 12 },
+      "email": { "domain_id": "dom-kestrel", "mailboxes": 0 },
+      "trend_links_live": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      "last_sync": null,
+      "checks": [
+        { "id": "dns", "label": "DNS", "state": "fail", "detail": "No A record yet, nameservers still at the registrar default" },
+        { "id": "rest", "label": "REST read", "state": "unknown", "detail": "Not attempted, nothing is reachable" },
+        { "id": "plugin", "label": "Upload plugin", "state": "unknown", "detail": "Not installed" }
+      ]
+    }
+  ]
+}

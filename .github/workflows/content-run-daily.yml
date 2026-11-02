@@ -1,0 +1,123 @@
+name: content run
+
+# Starts a content run and then insists on the record that proves it finished.
+#
+# Two inputs, both for a manual run:
+#   dry_run  (default true)  report what would happen, write nothing
+#   force    (default false) start even when the control file has refresh off
+#
+# On the seed data in this repository nothing starts, and the job says why: the
+# webhook in data/workflow-control.json is a placeholder, so there is no engine
+# behind it. That is the honest outcome, and it is printed as a notice rather
+# than as a failure.
+
+on:
+  schedule:
+    - cron: '10 6 * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Report only. Write nothing, commit nothing.'
+        type: boolean
+        default: true
+      force:
+        description: 'Start even when the control file says refresh is off.'
+        type: boolean
+        default: false
+
+concurrency:
+  group: content-run
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  content-run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: The gate before anything is allowed to run
+        run: |
+          npm test
+          npm run check
+          node scripts/coordination.js
+          node scripts/monitor-state.js || true
+
+      - name: Decide whether this run may start
+        id: gate
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          ARGS=""
+          if [ "${{ inputs.force }}" = "true" ]; then ARGS="--force"; fi
+          node scripts/run-gate.js $ARGS >> "$GITHUB_OUTPUT"
+
+      - name: Say why nothing will run
+        if: steps.gate.outputs.allowed != 'true'
+        run: |
+          echo "::notice title=No run started::${{ steps.gate.outputs.reason }}"
+          echo "Last record: ${{ steps.gate.outputs.last_run }}, ${{ steps.gate.outputs.last_age_hours }} hours old."
+          echo "A run needs data/workflow-control.json to name a real engine and to allow a refresh."
+
+      - name: Start the run
+        if: steps.gate.outputs.allowed == 'true'
+        id: start
+        run: |
+          STARTED=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          echo "started=$STARTED" >> "$GITHUB_OUTPUT"
+          WEBHOOK=$(node -p "require('./data/workflow-control.json').webhook_url")
+          KIND=$(node -p "require('./data/workflow-control.json').allowed_kinds[0]")
+          echo "Asking $WEBHOOK for a $KIND run at $STARTED (dry run: ${{ steps.gate.outputs.dry_run }})"
+          curl --fail --silent --show-error --max-time 60 \
+            -X POST "$WEBHOOK" \
+            -H 'content-type: application/json' \
+            --data "{\"kind\":\"$KIND\",\"dry_run\":${{ steps.gate.outputs.dry_run }},\"requested_at\":\"$STARTED\"}"
+
+      # The record is the only thing that proves a run happened. A green job that
+      # started something and never heard back is not a success.
+      - name: Wait for the completion record
+        if: steps.gate.outputs.allowed == 'true'
+        run: |
+          for attempt in 1 2 3 4 5 6; do
+            if node scripts/run-gate.js --check-completion "${{ steps.start.outputs.started }}"; then
+              exit 0
+            fi
+            echo "Attempt $attempt: no newer record yet. Waiting 60s."
+            sleep 60
+          done
+          echo "::error title=No completion record::The run was started at ${{ steps.start.outputs.started }} and data/workflow-status.json was never updated. Treat the run as not having happened."
+          exit 1
+
+      - name: Commit what the run wrote
+        if: steps.gate.outputs.allowed == 'true' && steps.gate.outputs.dry_run != 'true'
+        run: |
+          git config user.name 'content-run'
+          git config user.email 'content-run@users.noreply.github.com'
+          git add data/
+          if git diff --staged --quiet; then
+            echo "The run wrote nothing. Nothing to commit."
+            exit 0
+          fi
+          git commit -m "data: content run ${{ steps.start.outputs.started }}"
+          git push
+
+      - name: Keep the output that says what happened
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: content-run-${{ github.run_id }}
+          path: data/
+          retention-days: 14

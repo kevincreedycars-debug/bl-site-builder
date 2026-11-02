@@ -1,0 +1,18 @@
+# Local-only space. The mailbox, worktrees and scratch live here and are never
+# published, so the repository never becomes the scratch pad.
+.local/
+tmp/
+node_modules/
+
+# Secrets never enter the repository. Only the example file is tracked.
+.env
+.env.*
+!.env.example
+
+# Editor / OS noise
+.DS_Store
+Thumbs.db
+*.log
+
+# Output of local checks
+artifacts/

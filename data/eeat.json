@@ -1,0 +1,60 @@
+{
+  "_meta": {
+    "as_of": "2026-11-02T09:15:00Z",
+    "source": "seed",
+    "produced_by": "seed-fixtures@v1",
+    "note": "Citations are checked by fetching the listing and comparing NAP, not by trusting a submission confirmation email."
+  },
+  "entity": {
+    "brand": "Backlink Studio",
+    "legal_name": "Backlink Studio Ltd",
+    "founder": "to be confirmed",
+    "nap": {
+      "name": "Backlink Studio",
+      "address": "to be confirmed",
+      "phone": "to be confirmed"
+    },
+    "same_as": [],
+    "note": "NAP is not filled in. Every directory entry that copies it will be wrong until it is, so nothing above can be verified yet."
+  },
+  "sources": [
+    { "id": "src-gbp", "name": "Google Business Profile", "type": "directory", "url": "https://business.google.com/", "cost": 0, "requires": "postal address or service area", "weight": 5 },
+    { "id": "src-linkedin", "name": "LinkedIn company page", "type": "profile", "url": "https://www.linkedin.com/company/", "cost": 0, "requires": "named admin", "weight": 4 },
+    { "id": "src-crunch", "name": "Crunchbase", "type": "profile", "url": "https://www.crunchbase.com/", "cost": 0, "requires": "founder name and funding facts", "weight": 3 },
+    { "id": "src-clutch", "name": "Clutch", "type": "directory", "url": "https://clutch.co/", "cost": 0, "requires": "client reviews, cannot self-publish", "weight": 4 },
+    { "id": "src-trustpilot", "name": "Trustpilot", "type": "review", "url": "https://www.trustpilot.com/", "cost": 0, "requires": "verified domain, real customers", "weight": 3 },
+    { "id": "src-press", "name": "Regional business press", "type": "press", "url": "https://example-press.example/", "cost": 250, "requires": "a story worth printing, not a directory entry", "weight": 5 }
+  ],
+  "entries": [
+    { "site_id": "site-atlas", "source_id": "src-gbp", "state": "verified", "url": "https://example-gbp.example/atlas", "verified_at": "2026-10-30T10:00:00Z", "note": "" },
+    { "site_id": "site-atlas", "source_id": "src-linkedin", "state": "verified", "url": "https://example-linkedin.example/atlas-workshop", "verified_at": "2026-10-30T10:02:00Z", "note": "" },
+    { "site_id": "site-atlas", "source_id": "src-crunch", "state": "verified", "url": "https://example-crunch.example/atlas-workshop", "verified_at": "2026-10-30T10:04:00Z", "note": "" },
+    { "site_id": "site-atlas", "source_id": "src-clutch", "state": "verified", "url": "https://example-clutch.example/atlas", "verified_at": "2026-10-30T10:06:00Z", "note": "" },
+    { "site_id": "site-atlas", "source_id": "src-trustpilot", "state": "pending", "url": null, "verified_at": null, "note": "Awaiting first real customer review, cannot be faked safely." },
+    { "site_id": "site-harbor", "source_id": "src-gbp", "state": "verified", "url": "https://example-gbp.example/harbor", "verified_at": "2026-10-24T10:00:00Z", "note": "" },
+    { "site_id": "site-harbor", "source_id": "src-linkedin", "state": "verified", "url": "https://example-linkedin.example/harbor-pine", "verified_at": "2026-10-24T10:02:00Z", "note": "" },
+    { "site_id": "site-harbor", "source_id": "src-crunch", "state": "missing", "url": null, "verified_at": null, "note": "No profile." },
+    { "site_id": "site-harbor", "source_id": "src-clutch", "state": "missing", "url": null, "verified_at": null, "note": "No profile." },
+    { "site_id": "site-harbor", "source_id": "src-trustpilot", "state": "missing", "url": null, "verified_at": null, "note": "No profile." },
+    { "site_id": "site-summit", "source_id": "src-gbp", "state": "verified", "url": "https://example-gbp.example/summit", "verified_at": "2026-10-31T10:00:00Z", "note": "" },
+    { "site_id": "site-summit", "source_id": "src-linkedin", "state": "verified", "url": "https://example-linkedin.example/summit-ledger", "verified_at": "2026-10-31T10:02:00Z", "note": "" },
+    { "site_id": "site-summit", "source_id": "src-crunch", "state": "verified", "url": "https://example-crunch.example/summit-ledger", "verified_at": "2026-10-31T10:04:00Z", "note": "" },
+    { "site_id": "site-summit", "source_id": "src-clutch", "state": "verified", "url": "https://example-clutch.example/summit", "verified_at": "2026-10-31T10:06:00Z", "note": "" },
+    { "site_id": "site-summit", "source_id": "src-trustpilot", "state": "verified", "url": "https://example-trust.example/summit-ledger", "verified_at": "2026-10-31T10:08:00Z", "note": "" },
+    { "site_id": "site-verdant", "source_id": "src-gbp", "state": "mismatch", "url": "https://example-gbp.example/verdant", "verified_at": "2026-10-28T11:00:00Z", "note": "Listing shows a phone number that was disconnected in September." },
+    { "site_id": "site-verdant", "source_id": "src-linkedin", "state": "pending", "url": null, "verified_at": null, "note": "Submitted, not yet reviewed by the platform." },
+    { "site_id": "site-verdant", "source_id": "src-crunch", "state": "missing", "url": null, "verified_at": null, "note": "No profile." },
+    { "site_id": "site-verdant", "source_id": "src-clutch", "state": "missing", "url": null, "verified_at": null, "note": "No profile." },
+    { "site_id": "site-verdant", "source_id": "src-trustpilot", "state": "missing", "url": null, "verified_at": null, "note": "No profile." },
+    { "site_id": "site-kestrel", "source_id": "src-gbp", "state": "missing", "url": null, "verified_at": null, "note": "Held until the site is live, an empty profile is worse than none." },
+    { "site_id": "site-kestrel", "source_id": "src-linkedin", "state": "missing", "url": null, "verified_at": null, "note": "" },
+    { "site_id": "site-kestrel", "source_id": "src-crunch", "state": "missing", "url": null, "verified_at": null, "note": "" },
+    { "site_id": "site-kestrel", "source_id": "src-clutch", "state": "missing", "url": null, "verified_at": null, "note": "" },
+    { "site_id": "site-kestrel", "source_id": "src-trustpilot", "state": "missing", "url": null, "verified_at": null, "note": "" }
+  ],
+  "authors": [
+    { "id": "au-01", "name": "M. Aldridge", "site_ids": ["site-atlas", "site-harbor"], "credentials": "Bench joiner, 18 years", "bio_state": "complete", "same_as": ["https://example-linkedin.example/m-aldridge"], "note": "" },
+    { "id": "au-02", "name": "R. Okafor", "site_ids": ["site-summit"], "credentials": "ACCA, former practice manager", "bio_state": "complete", "same_as": ["https://example-linkedin.example/r-okafor"], "note": "" },
+    { "id": "au-03", "name": "Unassigned", "site_ids": ["site-verdant", "site-kestrel"], "credentials": null, "bio_state": "missing", "same_as": [], "note": "Both sites publish without a named author, the weakest trust signal on the board." }
+  ]
+}

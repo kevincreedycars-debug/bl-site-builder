@@ -1,0 +1,16 @@
+{
+  "_meta": {
+    "as_of": "2026-11-02T09:15:00Z",
+    "source": "seed",
+    "produced_by": "seed-fixtures@v1",
+    "note": "Non-secret control file. The dashboard reads this to know whether the run button is allowed to do anything. No key, token or password belongs in this file."
+  },
+  "refresh_enabled": false,
+  "dry_run_only": true,
+  "reason": "No engine is connected yet in this repository. The button is disabled rather than decorative.",
+  "webhook_url": "https://<your-automation-host>/webhook/content-run",
+  "allowed_kinds": ["content-run", "site-sync", "link-check", "citation-sweep", "email-warmup"],
+  "max_runtime_minutes": 20,
+  "updated_at": "2026-11-02T09:15:00Z",
+  "updated_by": "coordinator"
+}

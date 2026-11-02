@@ -1,0 +1,26 @@
+{
+  "_meta": {
+    "as_of": "2026-11-02T09:15:00Z",
+    "source": "seed",
+    "produced_by": "seed-fixtures@v1",
+    "note": "One row per placement. verified means the page was fetched and the anchor found in the served HTML. placed means the plugin reported success and nothing was checked."
+  },
+  "thresholds": {
+    "recheck_days": 30,
+    "verify_after_hours": 24
+  },
+  "placements": [
+    { "id": "b-1001", "seller_site_id": "site-atlas", "target_url": "https://buyer-north.example/guides/plywood/", "anchor": "plywood shelving guide", "buyer": "Northgate Media", "price": 145, "state": "verified", "placed_at": "2026-09-18T10:00:00Z", "verified_at": "2026-10-29T10:00:00Z", "index_status": "indexed", "live_check": { "http": 200, "at": "2026-10-29T10:00:00Z" } },
+    { "id": "b-1002", "seller_site_id": "site-atlas", "target_url": "https://buyer-loom.example/tools/sharpening/", "anchor": "sharpening jig plans", "buyer": "Loom Digital", "price": 160, "state": "verified", "placed_at": "2026-10-02T10:00:00Z", "verified_at": "2026-10-28T10:05:00Z", "index_status": "indexed", "live_check": { "http": 200, "at": "2026-10-28T10:05:00Z" } },
+    { "id": "b-1003", "seller_site_id": "site-atlas", "target_url": "https://buyer-fen.example/benches/", "anchor": "workbench height", "buyer": "Fenwick Supply", "price": 130, "state": "lost", "placed_at": "2026-08-14T10:00:00Z", "verified_at": "2026-10-31T10:00:00Z", "index_status": "dropped", "live_check": { "http": 404, "at": "2026-10-31T10:00:00Z" }, "note": "Target page returns 404, the link is gone. Replacement or refund is owed." },
+    { "id": "b-1004", "seller_site_id": "site-atlas", "target_url": "https://buyer-aire.example/router/", "anchor": "router jig setup", "buyer": "Aire Interactive", "price": 175, "state": "placed", "placed_at": "2026-11-01T15:40:00Z", "verified_at": null, "index_status": "unknown", "live_check": { "http": null, "at": null }, "note": "Placed under 24 hours ago, the verify window is still open." },
+    { "id": "b-1005", "seller_site_id": "site-harbor", "target_url": "https://buyer-oak.example/finishes/", "anchor": "oak finishes for coastal homes", "buyer": "Oakline Studio", "price": 120, "state": "verified", "placed_at": "2026-08-30T10:00:00Z", "verified_at": "2026-09-20T10:00:00Z", "index_status": "indexed", "live_check": { "http": 200, "at": "2026-09-20T10:00:00Z" }, "note": "Last checked 43 days ago, past the 30 day recheck threshold." },
+    { "id": "b-1006", "seller_site_id": "site-harbor", "target_url": "https://buyer-tide.example/linen/", "anchor": "linen care guide", "buyer": "Tideline", "price": 105, "state": "verified", "placed_at": "2026-10-11T10:00:00Z", "verified_at": "2026-10-27T10:00:00Z", "index_status": "indexed", "live_check": { "http": 200, "at": "2026-10-27T10:00:00Z" } },
+    { "id": "b-1007", "seller_site_id": "site-harbor", "target_url": "https://buyer-gable.example/decor/", "anchor": "coastal decor ideas", "buyer": "Gable & Co", "price": 95, "state": "expired", "placed_at": "2025-10-01T10:00:00Z", "verified_at": "2026-10-01T10:00:00Z", "index_status": "indexed", "live_check": { "http": 200, "at": "2026-10-01T10:00:00Z" }, "note": "12 month term ended, still live and available to resell or renew." },
+    { "id": "b-1008", "seller_site_id": "site-summit", "target_url": "https://buyer-ledgerly.example/tax/", "anchor": "sole trader tax dates", "buyer": "Ledgerly", "price": 240, "state": "verified", "placed_at": "2026-10-06T10:00:00Z", "verified_at": "2026-10-30T10:00:00Z", "index_status": "indexed", "live_check": { "http": 200, "at": "2026-10-30T10:00:00Z" } },
+    { "id": "b-1009", "seller_site_id": "site-summit", "target_url": "https://buyer-count.example/pricing/", "anchor": "retainer pricing model", "buyer": "Count Advisory", "price": 265, "state": "verified", "placed_at": "2026-09-25T10:00:00Z", "verified_at": "2026-10-26T10:00:00Z", "index_status": "indexed", "live_check": { "http": 200, "at": "2026-10-26T10:00:00Z" } },
+    { "id": "b-1010", "seller_site_id": "site-summit", "target_url": "https://buyer-vee.example/bookkeeping/", "anchor": "monthly bookkeeping pack", "buyer": "Veco", "price": 210, "state": "placed", "placed_at": "2026-11-02T06:50:00Z", "verified_at": null, "index_status": "unknown", "live_check": { "http": null, "at": null }, "note": "Placed this morning, verify window still open." },
+    { "id": "b-1011", "seller_site_id": "site-verdant", "target_url": "https://buyer-pan.example/preserving/", "anchor": "salt preserved lemons", "buyer": "Pantry Nine", "price": 90, "state": "lost", "placed_at": "2026-08-02T10:00:00Z", "verified_at": "2026-10-28T11:00:00Z", "index_status": "dropped", "live_check": { "http": 401, "at": "2026-10-28T11:00:00Z" }, "note": "The whole site is returning 401, so the link cannot be confirmed either way." },
+    { "id": "b-1012", "seller_site_id": "site-summit", "target_url": "https://buyer-forge.example/credit/", "anchor": "business credit file", "buyer": null, "price": 230, "state": "listed", "placed_at": null, "verified_at": null, "index_status": "unknown", "live_check": { "http": null, "at": null }, "note": "Listed and unsold." }
+  ]
+}

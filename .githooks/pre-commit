@@ -1,0 +1,32 @@
+#!/bin/sh
+# .githooks/pre-commit
+#
+# The two things worth stopping a commit for:
+#   1. tests that do not pass
+#   2. something shaped like a credential
+#
+# Enable once per copy:  git config core.hooksPath .githooks
+# Skip in an emergency:  SKIP_HOOKS=1 git commit ...
+
+set -e
+
+if [ "${SKIP_HOOKS:-0}" = "1" ]; then
+  echo "pre-commit: skipped because SKIP_HOOKS=1"
+  exit 0
+fi
+
+echo "pre-commit: running the tests"
+node --test "tests/*.test.js" >/dev/null
+echo "pre-commit: tests pass"
+
+echo "pre-commit: looking for credentials in what is staged"
+if command -v pwsh >/dev/null 2>&1; then
+  pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/check-repo-for-secrets.ps1 -Mode staged
+elif command -v powershell >/dev/null 2>&1; then
+  powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-repo-for-secrets.ps1 -Mode staged
+else
+  echo "pre-commit: no PowerShell here, so the secret scan did not run"
+  echo "pre-commit: run it by hand before pushing: npm run scan"
+fi
+
+exit 0

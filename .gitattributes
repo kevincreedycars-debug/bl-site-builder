@@ -1,0 +1,13 @@
+# Line-ending rule, decided once: LF in the repository AND in the working tree.
+# The publish check compares hashes, and a hash is only useful if the bytes are
+# the same in both places. Changing this file changes every hash in docs/.
+* text=auto eol=lf
+
+# Binary assets are never touched.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.ico binary
+*.woff binary
+*.woff2 binary

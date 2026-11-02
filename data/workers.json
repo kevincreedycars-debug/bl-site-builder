@@ -1,0 +1,82 @@
+{
+  "_meta": {
+    "as_of": "2026-11-02T09:15:00Z",
+    "source": "seed",
+    "produced_by": "seed-fixtures@v1",
+    "note": "Mirror of docs/orchestration/projects.json plus the last state each worker reported. The dashboard says last reported, never online: it cannot see a window, only a file."
+  },
+  "workers": [
+    {
+      "id": "coordinator",
+      "role": "Coordinates, reviews, publishes",
+      "assignment": "coordinator",
+      "worktree": "D:/BL Site Builder",
+      "branch": "main",
+      "status": "working",
+      "last_reported": "2026-11-02T09:12:00Z",
+      "current_task": "Building the dashboard and the harness floor",
+      "open_questions": 0,
+      "last_submission": null
+    },
+    {
+      "id": "site-connector",
+      "role": "WordPress site modules and the upload plugin",
+      "assignment": "site-connector",
+      "worktree": ".local/worktrees/site-connector",
+      "branch": "lane/site-connector",
+      "status": "blocked",
+      "last_reported": "2026-11-02T08:55:00Z",
+      "current_task": "Verdant Table returns 401, needs a new application password from the site owner",
+      "open_questions": 1,
+      "last_submission": "2026-11-02T08:40:00Z"
+    },
+    {
+      "id": "content-writer",
+      "role": "Briefs, research, drafts",
+      "assignment": "content-writer",
+      "worktree": ".local/worktrees/content-writer",
+      "branch": "lane/content-writer",
+      "status": "working",
+      "last_reported": "2026-11-02T09:08:00Z",
+      "current_task": "Drafting br-084, bookkeeper monthly pack",
+      "open_questions": 0,
+      "last_submission": "2026-11-01T16:30:00Z"
+    },
+    {
+      "id": "citation-builder",
+      "role": "EEAT citations and NAP consistency",
+      "assignment": "citation-builder",
+      "worktree": ".local/worktrees/citation-builder",
+      "branch": "lane/citation-builder",
+      "status": "idle",
+      "last_reported": "2026-11-02T07:20:00Z",
+      "current_task": "None, waiting for the NAP details from the person",
+      "open_questions": 2,
+      "last_submission": "2026-10-31T15:00:00Z"
+    },
+    {
+      "id": "email-ops",
+      "role": "Sending domains, warm-up, reputation",
+      "assignment": "email-ops",
+      "worktree": ".local/worktrees/email-ops",
+      "branch": "lane/email-ops",
+      "status": "awaiting_review",
+      "last_reported": "2026-11-02T08:58:00Z",
+      "current_task": "Submitted the verdant mailbox quarantine proposal",
+      "open_questions": 0,
+      "last_submission": "2026-11-02T08:50:00Z"
+    },
+    {
+      "id": "reviewer",
+      "role": "Independent check, never the author",
+      "assignment": "reviewer",
+      "worktree": ".local/worktrees/reviewer",
+      "branch": "lane/reviewer",
+      "status": "offline",
+      "last_reported": "2026-10-31T18:40:00Z",
+      "current_task": "Nothing reported since 31 Oct",
+      "open_questions": 0,
+      "last_submission": null
+    }
+  ]
+}

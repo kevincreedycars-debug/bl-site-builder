@@ -1,0 +1,82 @@
+{
+  "_meta": {
+    "as_of": "2026-11-02T09:15:00Z",
+    "source": "seed",
+    "produced_by": "seed-fixtures@v1",
+    "note": "One row per run. A run only counts as finished when it wrote workflow-status.json itself. A 200 from a webhook proves nothing."
+  },
+  "runs": [
+    {
+      "id": "run-2026-11-02-a",
+      "kind": "content-run",
+      "trigger": "clock",
+      "started": "2026-11-02T07:00:00Z",
+      "finished": "2026-11-02T07:12:00Z",
+      "state": "success",
+      "wrote_status": true,
+      "published": 2,
+      "failed_steps": [],
+      "notes": "Two pieces pushed to Atlas Workshop, both verified live."
+    },
+    {
+      "id": "run-2026-11-02-b",
+      "kind": "site-sync",
+      "trigger": "clock",
+      "started": "2026-11-02T08:40:00Z",
+      "finished": "2026-11-02T08:44:00Z",
+      "state": "success",
+      "wrote_status": true,
+      "published": 0,
+      "failed_steps": [],
+      "notes": "Five sites polled, one returned 401."
+    },
+    {
+      "id": "run-2026-11-01-a",
+      "kind": "link-check",
+      "trigger": "clock",
+      "started": "2026-11-01T22:00:00Z",
+      "finished": "2026-11-01T22:06:00Z",
+      "state": "failed",
+      "wrote_status": true,
+      "published": 0,
+      "failed_steps": ["fetch-verdant"],
+      "notes": "Verdant Table timed out, so three of its links were left unverified rather than marked good."
+    },
+    {
+      "id": "run-2026-11-01-b",
+      "kind": "citation-sweep",
+      "trigger": "clock",
+      "started": "2026-11-01T23:00:00Z",
+      "finished": "2026-11-01T23:31:00Z",
+      "state": "incomplete",
+      "wrote_status": true,
+      "published": 0,
+      "failed_steps": ["crunchbase", "clutch"],
+      "notes": "Four of six listings checked. Two were rate limited and were recorded as unknown, not as fine."
+    },
+    {
+      "id": "run-2026-11-01-c",
+      "kind": "email-warmup",
+      "trigger": "clock",
+      "started": "2026-11-01T06:00:00Z",
+      "finished": "2026-11-01T06:02:00Z",
+      "state": "success",
+      "wrote_status": true,
+      "published": 0,
+      "failed_steps": [],
+      "notes": "Caps re-set for the day. One mailbox already at its cap."
+    },
+    {
+      "id": "run-2026-10-31-a",
+      "kind": "content-run",
+      "trigger": "manual",
+      "started": "2026-10-31T14:00:00Z",
+      "finished": null,
+      "state": "verification_expired",
+      "wrote_status": false,
+      "published": 0,
+      "failed_steps": ["publish-harbor"],
+      "notes": "The run stopped after the commit and never wrote its own record. Treated as not run."
+    }
+  ]
+}

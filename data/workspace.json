@@ -1,0 +1,67 @@
+{
+  "_meta": {
+    "as_of": "2026-11-02T09:15:00Z",
+    "source": "seed",
+    "produced_by": "seed-fixtures@v1",
+    "note": "Fixture data with the shape the pipeline will write. Domains end in .example on purpose so nothing here can be mistaken for a live site."
+  },
+  "workspace": {
+    "id": "bl-site-builder",
+    "name": "Backlink Studio",
+    "tagline": "Site portfolio, content pipeline and link inventory in one place",
+    "currency": "USD",
+    "timezone": "Europe/London",
+    "repo_owner_placeholder": "<your-github-owner>/bl-site-builder",
+    "live_url_placeholder": "https://<your-github-owner>.github.io/bl-site-builder/"
+  },
+  "modules": [
+    {
+      "id": "sites",
+      "name": "WordPress sites",
+      "state": "scaffolded",
+      "summary": "One module slot per connected site. Connection is proven by an authenticated REST read, not by a stored password.",
+      "data": "data/sites.json",
+      "owner": "site-connector"
+    },
+    {
+      "id": "content",
+      "name": "Content pipeline",
+      "state": "seeded",
+      "summary": "Brief, research, draft, edit, approve, publish. Every piece must carry a claim ledger before it can be approved.",
+      "data": "data/content.json",
+      "owner": "content-writer"
+    },
+    {
+      "id": "backlinks",
+      "name": "Link inventory",
+      "state": "seeded",
+      "summary": "What is listed for sale, what is ordered, what is placed, and what was verified live.",
+      "data": "data/backlinks.json",
+      "owner": "coordinator"
+    },
+    {
+      "id": "email",
+      "name": "Central email",
+      "state": "scaffolded",
+      "summary": "Sending domains, mailbox warm-up, caps and reputation, in one place instead of per site.",
+      "data": "data/email.json",
+      "owner": "email-ops"
+    },
+    {
+      "id": "eeat",
+      "name": "EEAT and citations",
+      "state": "seeded",
+      "summary": "Citation targets per site, NAP consistency, author entities and what is still missing.",
+      "data": "data/eeat.json",
+      "owner": "citation-builder"
+    },
+    {
+      "id": "harness",
+      "name": "Harness",
+      "state": "scaffolded",
+      "summary": "The register, assignments, mailbox and the run record. What keeps the other five modules checkable.",
+      "data": "data/workers.json",
+      "owner": "coordinator"
+    }
+  ]
+}

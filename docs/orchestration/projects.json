@@ -1,0 +1,80 @@
+{
+  "_meta": {
+    "as_of": "2026-11-02T09:15:00Z",
+    "source": "seed",
+    "produced_by": "seed-fixtures@v1",
+    "note": "The register of projects, who owns each, and which file each may write. Read by scripts/coordination.js and by the harness view. No secret, key or credential belongs in this file."
+  },
+  "workspace": "bl-site-builder",
+  "kinds": ["content-run", "site-sync", "link-check", "citation-sweep", "email-warmup"],
+  "projects": [
+    {
+      "id": "sites",
+      "name": "WordPress sites",
+      "kind": "site-sync",
+      "owner": "site-connector",
+      "writes": "data/sites.json",
+      "reads": ["data/sites.json", "data/workspace.json"],
+      "assignment": "docs/orchestration/assignments/site-sync.md",
+      "cadence": "twice daily",
+      "done_when": "Every connected site has a fetch result newer than the last sync, or a stated reason it does not.",
+      "stops_when": "A site returns 401 or 403 twice in a row. A wrong password is not a reason to keep trying."
+    },
+    {
+      "id": "content",
+      "name": "Content pipeline",
+      "kind": "content-run",
+      "owner": "content-writer",
+      "writes": "data/content.json",
+      "reads": ["data/content.json", "data/sites.json", "data/eeat.json"],
+      "assignment": "docs/orchestration/assignments/content-run.md",
+      "cadence": "daily",
+      "done_when": "Every piece has a state that matches its evidence: a published URL fetched and matched, a ledger for every fact, a citation that is the same on the site and the listing.",
+      "stops_when": "A piece is ready to publish and the site module is returning 401. Escalate; do not draft around a site that cannot be read."
+    },
+    {
+      "id": "backlinks",
+      "name": "Link inventory",
+      "kind": "link-check",
+      "owner": "coordinator",
+      "writes": "data/backlinks.json",
+      "reads": ["data/backlinks.json", "data/sites.json"],
+      "assignment": "docs/orchestration/assignments/link-check.md",
+      "cadence": "daily",
+      "done_when": "Every placement has a fetch result newer than the last check, with the status code and the anchor text that was seen.",
+      "stops_when": "A whole site is unreachable. Then the links on it are unknown, not lost, and the difference is written down."
+    },
+    {
+      "id": "email",
+      "name": "Central email",
+      "kind": "email-warmup",
+      "owner": "email-ops",
+      "writes": "data/email.json",
+      "reads": ["data/email.json"],
+      "assignment": "docs/orchestration/assignments/email-warmup.md",
+      "cadence": "daily, small",
+      "done_when": "Every sending domain has SPF, DKIM and DMARC recorded as seen, and every mailbox has a volume under its cap and a bounce rate under the warn line.",
+      "stops_when": "A domain is listed on a blocklist, or bounce is above the fail line. Pause it and say so; do not send through a bad domain to keep the volume up."
+    },
+    {
+      "id": "eeat",
+      "name": "EEAT and citations",
+      "kind": "citation-sweep",
+      "owner": "citation-builder",
+      "writes": "data/eeat.json",
+      "reads": ["data/eeat.json", "data/sites.json"],
+      "assignment": "docs/orchestration/assignments/citation-sweep.md",
+      "cadence": "weekly",
+      "done_when": "Every source is either verified, pending with an owner, or recorded as rejected with the reason. The entity details are the same on every entry that has them.",
+      "stops_when": "The entity details are incomplete. Fill them once rather than correcting ten listings to a guess."
+    }
+  ],
+  "rules": {
+    "one_writer_per_file": true,
+    "submission_shape": "docs/orchestration/templates/submission.json",
+    "run_record": "data/workflow-status.json",
+    "run_log": "data/runs.json",
+    "secrets_allowed": false,
+    "published_files": ["data/sites.json", "data/content.json", "data/backlinks.json", "data/email.json", "data/eeat.json", "data/workers.json", "data/runs.json", "data/workflow-control.json", "data/workflow-status.json", "data/workspace.json"]
+  }
+}

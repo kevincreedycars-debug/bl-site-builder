@@ -1,0 +1,55 @@
+{
+  "_meta": {
+    "note": "The shape a run hands back. This file is a template and is validated by scripts/coordination.js; it holds example values only, and none of them are real. An empty unknowns list is a claim that nothing was undetermined, and it is usually a false one.",
+    "as_of": "2026-11-02T09:15:00Z",
+    "produced_by": "seed-fixtures@v1",
+    "source": "template"
+  },
+  "kind": "link-check",
+  "run_id": "run-2026-11-02-c",
+  "project": "backlinks",
+  "worker": "coordinator",
+  "started_at": "2026-11-02T09:10:00Z",
+  "finished_at": "2026-11-02T09:13:00Z",
+  "as_of": "2026-11-02T09:13:00Z",
+  "result": "incomplete",
+  "evidence": [
+    {
+      "ref": "b-1003",
+      "claim": "The sold link on Atlas Workshop is gone.",
+      "measured": "GET https://atlas-workshop.example/workbench-height/",
+      "saw": "HTTP 404, no anchor present in the body",
+      "at": "2026-11-02T09:11:00Z"
+    },
+    {
+      "ref": "b-1011",
+      "claim": "Verdant Table cannot be checked at all.",
+      "measured": "GET https://verdant-table.example/preserving/",
+      "saw": "HTTP 401 for the whole site, so the link is unknown rather than lost",
+      "at": "2026-11-02T09:12:00Z"
+    }
+  ],
+  "changed": [
+    {
+      "file": "data/backlinks.json",
+      "what": "b-1003 moved to lost with the 404 recorded; b-1011 left as placed and its check marked unknown",
+      "count": 2
+    }
+  ],
+  "unknowns": [
+    {
+      "what": "Whether the link on Verdant Table is still there",
+      "why": "The site returns 401 to an unauthenticated fetch, so nothing about its pages can be confirmed.",
+      "needs": "A working application password for that site, or the host to stop returning 401."
+    }
+  ],
+  "money": [
+    {
+      "ref": "b-1003",
+      "what": "Replacement or refund is owed for a sold link that returns 404",
+      "amount": null,
+      "currency": "USD"
+    }
+  ],
+  "next": "Ask the site owner to restore the page, or replace the link and tell the buyer this week."
+}
