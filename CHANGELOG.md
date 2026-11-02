@@ -3,6 +3,32 @@
 Newest first. One entry per working session that changed something a reader can
 see or run.
 
+## 2 November 2026 — the brief, filed and checked
+
+**Added**
+
+- `docs/strategy/PROJECT_BRIEF.md`: the project brief written by the `strategy`
+  worker, kept in its own words. Parts 1 to 5 describe the older trading
+  repository; parts 6 to 9 are written for a project like this one.
+- A note at the top of it, written by the coordinator and kept apart from the
+  text, listing the four measurements in it that belong to that other repository
+  rather than to these files: the page sizes, the number of registered workers,
+  the workflow exports, and a live address. Without the note, a reader would
+  compare a 20,229-line page against a 1,326-line one and conclude something is
+  missing.
+- `content/README.md`: the three stage folders, what goes in each, and the rule
+  that separates them.
+
+**Changed**
+
+- `SESSION_NOTES.md` records what the brief proposes for the two open questions,
+  and why neither is adopted yet.
+
+**Notes**
+
+- Nothing in the page, the data or the rules moved. The brief is advice, and it
+  is filed as advice.
+
 ## 2 November 2026 — the page draws all eight views, and there is a gate
 
 **Added**

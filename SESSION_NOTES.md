@@ -80,3 +80,14 @@ own value or says it does not know.
    today. Whether a draft with a partial ledger can be approved is undecided.
 
 Questions 1 and 6 are the two that change what the page is allowed to call good.
+
+## What the brief does not settle
+
+`docs/strategy/PROJECT_BRIEF.md` was filed on 2 November. It proposes a default
+answer for questions 1 and 2: published means a live URL that answers and whose
+text matches the approved draft, and sourced means every number, every date,
+every attributed quote and anything about a person. The first is what the code
+already does, which is why nothing moved when the brief arrived. The second is
+narrower than the assignment file, which asks for a ledger line for every fact.
+Neither is adopted, because a default from a worker is advice with a label on
+it, not a decision.
