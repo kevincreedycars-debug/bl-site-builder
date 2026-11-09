@@ -3,6 +3,45 @@
 Newest first. One entry per working session that changed something a reader can
 see or run.
 
+## 9 November 2026 — a map view, and a repository to host it from
+
+**Added**
+
+- A ninth view, `#/map`: the same ten files drawn as one picture. A sphere per
+  site, a tick per citation cell, a bead per sold link, a node per sending
+  domain and mailbox, a lane per worker, and connectors between them. Colour is
+  the state the file records, size is pages published, height is citation
+  coverage. Nothing else is encoded, and the distance between two objects is how
+  the picture was arranged rather than a measurement.
+- `js/scene.js`, the model. It turns the loaded files into objects, connectors,
+  layers, an encoding legend and a list of what did not arrive. No three.js, no
+  DOM and no clock, so `tests/scene.test.js` checks the whole picture in Node.
+- `js/map3d.js`, the canvas. Geometry, camera and colour only; it frees
+  everything in `dispose()`, holds still when the reader asks for less motion,
+  and takes its colours from the stylesheet tokens.
+- One row per object, one legend row per mark, and one `<details>` per object
+  below the canvas. The canvas and its layer switches are left out of the print
+  stylesheet, so paper loses the picture and no facts.
+- `vendor/three.module.js` (r170) and `vendor/README.md`: the version, the byte
+  count and the sha256 of the copy. `npm run check` now fails if the map imports
+  anything from another host.
+
+**Changed**
+
+- `npm test` is 75 tests: 14 for the model, 2 for the canvas, and one that
+  compares the rendered tables against the model built from the same files.
+- `npm run check` fetches `#/map` and the map module over HTTP, so a broken
+  import is found before a browser finds it.
+- `DECISIONS.md` D11: the map is a view of a model, and three.js is copied in.
+
+**Notes**
+
+- The repository now exists at `github.com/kevincreedycars-debug/bl-site-builder`
+  and the work is committed. The first push waits on a token scope: the history
+  contains `.github/workflows/content-run-daily.yml`, and an OAuth app may not
+  create that file without the `workflow` scope. Nothing on the page depends on
+  the wait.
+
 ## 2 November 2026 — the brief, filed and checked
 
 **Added**
