@@ -869,3 +869,218 @@ dl.facts dd {
     color: inherit;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   The map: a canvas, a panel beside it, and the tables under both.
+   The canvas is decoration with a job, so the panel and the tables carry the
+   same words in text. Nothing here is needed to read a fact.
+   --------------------------------------------------------------------------- */
+
+.map-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 2.1fr) minmax(240px, 1fr);
+  gap: 0.9rem;
+  margin: 0.9rem 0;
+  align-items: stretch;
+}
+
+.map-frame {
+  position: relative;
+  min-height: clamp(340px, 54vh, 600px);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+#map-canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  touch-action: none;
+}
+
+.map-labels {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.map-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-width: 14ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font: 600 0.75rem/1.4 var(--sans);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  padding: 0.05rem 0.4rem;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.map-label:hover {
+  border-color: var(--line-strong);
+}
+
+.map-hint,
+.map-status {
+  position: absolute;
+  margin: 0;
+  font-size: 0.72rem;
+  color: var(--ink-3);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 0.15rem 0.45rem;
+  max-width: calc(100% - 1.2rem);
+}
+
+.map-hint {
+  bottom: 0.55rem;
+  left: 0.6rem;
+}
+
+.map-status {
+  top: 0.55rem;
+  left: 0.6rem;
+  font-family: var(--mono);
+}
+
+.map-panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 0.7rem 0.8rem;
+  overflow: auto;
+  max-height: clamp(340px, 54vh, 600px);
+}
+
+.map-panel h3 {
+  margin: 0 0 0.3rem;
+  font-size: 1rem;
+}
+
+.map-panel .attention {
+  margin: 0.4rem 0 0.6rem;
+}
+
+.map-asking {
+  margin: 0.6rem 0 0;
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-3);
+}
+
+.map-layers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 0.5rem;
+  margin: 0.9rem 0;
+}
+
+.map-toggle {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.05rem 0.5rem;
+  align-items: baseline;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 0.45rem 0.6rem;
+  cursor: pointer;
+}
+
+.map-toggle input {
+  margin: 0;
+}
+
+.map-toggle-name {
+  font-weight: 600;
+  font-size: 0.88rem;
+}
+
+.map-toggle .sub {
+  grid-column: 2;
+}
+
+.map-keys {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0 0 1rem;
+}
+
+.map-keys-head {
+  flex: 1 0 100%;
+  margin: 0 0 0.15rem;
+  font-size: 0.85rem;
+  color: var(--ink-2);
+}
+
+.map-keys > .sub {
+  flex: 1 0 100%;
+}
+
+.map-facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 0.4rem 0.9rem;
+}
+
+.map-fact {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 0.4rem 0.55rem;
+}
+
+.map-fact summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.map-fact summary .sub {
+  font-weight: 400;
+}
+
+.map-fact dl.facts {
+  margin: 0.45rem 0 0;
+}
+
+@media (max-width: 900px) {
+  .map-stage {
+    grid-template-columns: 1fr;
+  }
+
+  .map-panel {
+    max-height: none;
+  }
+}
+
+@media print {
+  /* A canvas prints a grey rectangle. The tables are the printable version. */
+  .map-frame,
+  .map-layers {
+    display: none;
+  }
+
+  .map-panel {
+    max-height: none;
+    box-shadow: none;
+  }
+}
+

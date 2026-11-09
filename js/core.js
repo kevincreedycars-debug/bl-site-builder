@@ -168,6 +168,33 @@ export function stateInfo(state) {
 }
 
 // ---------------------------------------------------------------------------
+// Tones: what a state looks like, decided once
+// ---------------------------------------------------------------------------
+//
+// The map paints from this table, and so could anything else that needs "is
+// this good or bad" as a colour. It lives here, with the other rules, because a
+// colour is a claim about a state: painting a lost link in the same green as a
+// verified one is the same kind of mistake as printing a zero for a missing
+// file. A state this table has never heard of is `unknown` — never the nearest
+// guess.
+
+export const NODE_TONE = {
+  site: { connected: 'ok', pending: 'low', error: 'high', paused: 'medium' },
+  worker: { working: 'ok', idle: 'low', blocked: 'high', awaiting_review: 'medium', offline: 'muted' },
+  mailbox: { active: 'ok', warming: 'low', paused: 'muted', risky: 'high' },
+  citation: { verified: 'ok', pending: 'medium', missing: 'muted', mismatch: 'high', rejected: 'high' },
+  link: { verified: 'ok', ordered: 'low', placed: 'low', listed: 'muted', lost: 'high', expired: 'high', refunded: 'low' },
+  domain: { clean: 'ok', listed: 'high' },
+  run: { success: 'ok', running: 'low', incomplete: 'medium', failed: 'high', verification_expired: 'high' }
+};
+
+export function nodeTone(kind, state) {
+  const table = NODE_TONE[kind];
+  const tone = table && Object.prototype.hasOwnProperty.call(table, state) ? table[state] : null;
+  return tone || 'unknown';
+}
+
+// ---------------------------------------------------------------------------
 // Invariants: the checks a piece has to pass for its own state to be honest
 // ---------------------------------------------------------------------------
 

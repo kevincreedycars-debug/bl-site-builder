@@ -16,6 +16,9 @@ holds every rule worth testing. `data/*.json` is the only input.
     index.html        the shell: header, tab list, one empty container
     script.js         what draws each view and moves between them
     js/core.js        the rules: state machine, attention, summaries, checks
+    js/scene.js       the map's model: which objects exist and what they claim
+    js/map3d.js       the canvas: three.js geometry, camera, labels
+    vendor/           three.js r170, copied in, with its sha256 in README.md
     styles.css        one stylesheet, light and dark, print included
     data/*.json       the evidence. Ten files, each with _meta.as_of
     tests/            what runs in node. Nothing else runs in CI
@@ -39,7 +42,7 @@ holds every rule worth testing. `data/*.json` is the only input.
 
 ## How to run it
 
-    npm test        the node tests. 57 of them, about a third of a second
+    npm test        the node tests. 75 of them, about a third of a second
     npm run check   serves the folder and fetches its own files over HTTP
     npm run serve   a local server on http://127.0.0.1:4173
     npm run harness the register, the assignments and the template still agree
@@ -64,6 +67,10 @@ enabled with `git config core.hooksPath .githooks`. `SKIP_HOOKS=1` skips it.
 
 - A rule that decides something (is this late? is this lost?) belongs in
   `js/core.js`, with a test in `tests/core.test.js`.
+- A rule about what the map draws (which objects exist, how big, how high, what
+  each one may claim) belongs in `js/scene.js`, with a test in
+  `tests/scene.test.js`. `js/map3d.js` chooses geometry and colour only, and
+  every fact it draws is repeated in the tables under the canvas.
 - A rule that only decides how something looks belongs in `script.js`.
 - Every view must survive a file it was not written for: no `undefined`, no
   `NaN`, no `[object Object]`, and `tests/views.test.js` checks exactly that.

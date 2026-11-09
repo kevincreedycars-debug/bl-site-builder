@@ -13,6 +13,9 @@ import { readFile } from 'node:fs/promises';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import path from 'node:path';
 
+import { DATA_FILES } from '../js/core.js';
+import { buildPortfolioScene } from '../js/scene.js';
+
 const ROOT = path.resolve(fileURLToPath(new URL('..', import.meta.url)));
 
 function makeElement(id) {
@@ -102,12 +105,13 @@ async function waitFor(check, label, timeoutMs = 4000) {
   throw new Error(`timed out waiting for ${label}`);
 }
 
-const VIEWS = ['overview', 'sites', 'content', 'backlinks', 'email', 'eeat', 'runs', 'harness'];
+const VIEWS = ['overview', 'map', 'sites', 'content', 'backlinks', 'email', 'eeat', 'runs', 'harness'];
 
 // A phrase that only that view's own body contains, so a fallback to the
 // overview cannot pass the check.
 const MARKERS = {
   overview: 'The files this page was built from',
+  map: 'Every mark has a meaning',
   sites: 'What each check found',
   content: 'Rows that fail their own checks',
   backlinks: 'What the states mean',
@@ -151,6 +155,44 @@ test('every view draws from the real data files', async (t) => {
       assert.ok(page.element('attention-total').textContent, 'the header should count what needs attention');
       assert.ok(page.element('footer-sources').textContent.includes('data/'), 'the footer should list the files');
     });
+  }
+});
+
+test('the map view holds a table row for every object the model draws', async () => {
+  const page = buildPage(VIEWS);
+  page.window.location.hash = '#/map';
+  globalThis.document = page.document;
+  globalThis.window = page.window;
+  globalThis.fetch = diskFetch;
+
+  await import(pathToFileURL(path.join(ROOT, 'script.js')).href + '?view=map-tables');
+
+  const app = page.element('app');
+  const html = await waitFor(
+    () => (app.innerHTML.includes('id="view-map"') ? app.innerHTML : null),
+    'the map view'
+  );
+
+  // The model is rebuilt from the same files the page read, so the count is a
+  // contract rather than a copy of whatever the view happened to print.
+  const files = Object.fromEntries(
+    await Promise.all(
+      DATA_FILES.map(async (entry) => [entry.key, JSON.parse(await readFile(path.join(ROOT, entry.path), 'utf8'))])
+    )
+  );
+  const model = buildPortfolioScene(files, { now: Date.parse('2026-11-02T09:15:00Z'), attention: [] });
+  const count = (needle) => html.split(needle).length - 1;
+
+  assert.match(html, /id="map-canvas"/, 'the canvas should be on the page');
+  assert.match(html, /id="map-labels"/, 'the labels should have a layer to sit on');
+  assert.match(html, /id="map-panel"/, 'the panel beside the canvas should be on the page');
+  assert.equal(count('data-layer="'), model.layers.length, 'one switch per layer');
+  assert.equal(count('<details class="map-fact">'), model.nodes.length, 'one fact sheet per object');
+  assert.equal(count('<code>data/'), model.nodes.length, 'every row should name its file');
+
+  // Nothing may be drawn that the tables under it cannot say in words.
+  for (const line of model.missing) {
+    assert.ok(html.includes(line.replace(/&/g, '&amp;').slice(0, 40)), `the map should say: ${line}`);
   }
 });
 

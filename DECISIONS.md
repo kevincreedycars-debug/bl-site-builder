@@ -120,3 +120,23 @@ points somewhere real by accident.
 
 **Why:** seed data gets copied into tickets, screenshots and documents. It must
 be safe in all three.
+
+## D11 — The map is a view of a model, and three.js is copied in
+
+**Decided:** the Map tab draws a model built by `js/scene.js` with a copy of
+three.js r170 kept in `vendor/`. The model is plain data: no three.js, no DOM and
+no clock of its own, so `tests/scene.test.js` can check every object, size and
+height without a browser or a graphics card.
+
+**Rules out:** loading three.js from a CDN, a second copy of a rule inside
+`js/map3d.js`, and any fact that exists only in pixels — every object, its tone
+and every fact about it is repeated in the tables under the canvas, and the
+canvas is not in the print stylesheet.
+
+**Why:** a picture that cannot be checked is a claim. Copying the library in
+keeps D1 and D2: no install, no build, nothing fetched from another host, and
+`vendor/README.md` records the version, the byte count and the sha256 so the copy
+can be proved rather than trusted.
+
+**Would be wrong if:** the copy could not be replaced in an afternoon by hand, or
+the model grew a rule the tests cannot see.

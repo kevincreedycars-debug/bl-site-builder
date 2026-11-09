@@ -33,6 +33,7 @@ import {
   summarise,
   validateData
 } from './js/core.js';
+import { buildPortfolioScene, describeScene } from './js/scene.js';
 
 // ---------------------------------------------------------------------------
 // Small helpers
@@ -258,7 +259,7 @@ function loadNotices() {
 // Shared pieces
 // ---------------------------------------------------------------------------
 
-const VIEWS = ['overview', 'sites', 'content', 'backlinks', 'email', 'eeat', 'runs', 'harness'];
+const VIEWS = ['overview', 'map', 'sites', 'content', 'backlinks', 'email', 'eeat', 'runs', 'harness'];
 
 function viewLink(entry) {
   const target = VIEWS.includes(entry.view) ? entry.view : 'overview';
@@ -1324,6 +1325,244 @@ function viewHarness() {
 }
 
 // ---------------------------------------------------------------------------
+// The map
+//
+// A picture of the same files, for the times a picture is faster than a table.
+// It decides nothing: js/scene.js builds the objects, js/map3d.js draws them,
+// and every fact on every object is repeated in the tables under the canvas, so
+// nothing on this view depends on a graphics card being present.
+// ---------------------------------------------------------------------------
+
+let mapController = null;
+let mapScene = null;
+let mapToken = 0;
+
+// The model calls an object by its kind. A reader is owed the words.
+const MAP_KINDS = {
+  hub: 'the portfolio itself',
+  site: 'a site',
+  citation: 'a citation source for a site',
+  link: 'a sold link',
+  domain: 'a sending domain',
+  mailbox: 'a mailbox on a sending domain',
+  worker: 'a lane that reported'
+};
+
+function mapModel() {
+  return buildPortfolioScene(state.data, { now: state.now, attention: state.attention });
+}
+
+function mapLayersHtml(model) {
+  return `<div class="map-layers" role="group" aria-label="What to draw on the map">
+    ${model.layers
+      .map(
+        (layer) => `<label class="map-toggle">
+        <input type="checkbox" data-layer="${esc(layer.id)}"${layer.on ? ' checked' : ''} />
+        <span class="map-toggle-name">${esc(layer.label)}</span>
+        <span class="sub">${
+          layer.count === null ? 'no count in the model' : `${fmtNumber(layer.count)} drawn`
+        } · ${esc(layer.note)}</span>
+      </label>`
+      )
+      .join('')}
+  </div>`;
+}
+
+// Motion is the one thing on this view that a colour cannot say twice, so the
+// objects that move are also written out in a line, in the same order.
+function mapPulseHtml(model) {
+  const asking = model.nodes.filter((node) => node.pulse);
+  if (!asking.length) {
+    return '<p class="sub">Nothing on the canvas is moving. No file is asking for a person on any object today.</p>';
+  }
+  const shown = asking.slice(0, 12);
+  return `<div class="map-keys" role="group" aria-label="Objects that pulse on the canvas">
+    <p class="map-keys-head">${fmtNumber(asking.length)} of these objects pulse, because a file is asking for a person
+    on them. Nothing else moves.</p>
+    ${shown.map((node) => chip(node.severity || 'low', node.label)).join('')}${
+      asking.length > shown.length
+        ? `<span class="sub">and ${fmtNumber(asking.length - shown.length)} more, all in the table below</span>`
+        : ''
+    }
+  </div>`;
+}
+
+function mapPanelHtml(node) {
+  if (!node) {
+    return `<h3>Nothing is selected</h3>
+      <p>Point at an object on the canvas, or press it, and this panel gives its state and what the file says to do
+      next. The tables below hold the same words for every object, one row each.</p>`;
+  }
+  const facts = node.facts.length
+    ? `<dl class="facts">${node.facts.map((fact) => `<dt>${esc(fact.label)}</dt><dd>${esc(fact.value)}</dd>`).join('')}</dl>`
+    : '<p class="empty">This object carries no facts of its own.</p>';
+  const asking = node.attention.length
+    ? `<h4 class="map-asking">Asking for a person</h4>${attentionList(node.attention)}`
+    : '<p class="sub">Nothing in the files is asking for this object today.</p>';
+  return `<h3>${esc(node.label)}<span class="sub">${esc(node.sublabel)}</span></h3>
+    <p class="sub">From <code>${esc(node.source)}</code>${
+      node.ref ? ` · <span class="mono">${esc(node.ref)}</span>` : ''
+    } · drawn as <span class="mono">${esc(node.tone)}</span></p>
+    ${asking}
+    ${facts}`;
+}
+
+function viewMap() {
+  const model = mapModel();
+  mapScene = model;
+  const missingNote = model.missing.length
+    ? notice(
+        'medium',
+        'Part of the picture is missing',
+        `<p>The map drew what arrived. Each of these lines is a file or a row that did not, and none of them
+         was filled in with a zero:</p><ul>${model.missing.map((line) => `<li>${esc(line)}</li>`).join('')}</ul>`
+      )
+    : '';
+
+  const stage = `<div class="map-stage">
+      <div class="map-frame">
+        <canvas id="map-canvas" tabindex="0" role="img"
+          aria-label="${esc(describeScene(model))} The tables below give the same facts as text."></canvas>
+        <div class="map-labels" id="map-labels" aria-hidden="true"></div>
+        <p class="map-hint">Drag to turn · wheel or pinch to zoom · arrow keys turn · press an object for its state
+        and the next act</p>
+        <p class="map-status" id="map-status"></p>
+      </div>
+      <aside class="map-panel" id="map-panel" aria-live="polite">${mapPanelHtml(null)}</aside>
+    </div>`;
+
+  const legendRows = model.encoding.map((entry) => ({
+    cells: [
+      { t: esc(entry.mark) },
+      { t: esc(entry.means) },
+      { t: esc(entry.detail), wrap: true }
+    ]
+  }));
+
+  return `<div class="view-head">
+      <h1>Map</h1>
+      <p>The same files as a picture: ${esc(describeScene(model))} Colour is the state each file records, size is
+      pages published, height is citation coverage. Nothing else is encoded, and how far apart two objects sit is
+      how the picture was arranged.</p>
+    </div>
+    ${missingNote}
+    ${stage}
+    ${mapLayersHtml(model)}
+    ${mapPulseHtml(model)}
+    ${section(
+      'map-legend',
+      'Every mark has a meaning',
+      'Read this before reading the picture',
+      table({ caption: 'What the canvas encodes, and what it refuses to encode.', head: ['Mark', 'Means', 'In full'], rows: legendRows })
+    )}
+    ${section(
+      'map-objects',
+      `Every object on the map — ${fmtNumber(model.nodes.length)}`,
+      'One row each, in the order the model holds them',
+      table({
+        caption:
+          'Size is the radius the canvas draws, which is pages published: a site with no count in its file keeps the smallest size. A tone of "unknown" means the state is not one js/core.js has a tone for, and is drawn as an outline.',
+        head: ['Object', 'What it is', 'Tone', { label: 'Size (radius)', num: true }, 'Source file'],
+        rows: model.nodes.map((node) => ({
+          cells: [
+            {
+              t: `<strong>${esc(node.label)}</strong>${node.severity ? ` ${sevPill(node.severity)}` : ''}<span class="sub">${esc(
+                node.sublabel
+              )}</span>`
+            },
+            { t: esc(MAP_KINDS[node.kind] || node.kind) },
+            { t: `<span class="mono">${esc(node.tone)}</span>` },
+            { t: fmtNumber(node.radius), num: true },
+            { t: `<code>${esc(node.source)}</code>` }
+          ]
+        }))
+      })
+    )}
+    ${section(
+      'map-facts',
+      'Every fact on every object',
+      'The same words the panel gives when an object is pressed',
+      `<div class="map-facts">${model.nodes
+        .map(
+          (node) => `<details class="map-fact">
+          <summary>${esc(node.label)} <span class="sub">${esc(MAP_KINDS[node.kind] || node.kind)} · ${esc(node.source)}</span></summary>
+          <dl class="facts">${node.facts
+            .map((fact) => `<dt>${esc(fact.label)}</dt><dd>${esc(fact.value)}</dd>`)
+            .join('')}</dl>
+          ${
+            node.attention.length
+              ? attentionList(node.attention)
+              : '<p class="empty">Nothing in the files is asking for this object today.</p>'
+          }
+        </details>`
+        )
+        .join('')}</div>`
+    )}`;
+}
+
+
+function paintMapPanel(node) {
+  const panel = document.getElementById('map-panel');
+  if (panel) panel.innerHTML = mapPanelHtml(node);
+}
+
+function teardownMap() {
+  // Any import still in flight belongs to the view being left behind.
+  mapToken += 1;
+  if (mapController) {
+    mapController.dispose();
+    mapController = null;
+  }
+}
+
+function mountMap() {
+  const canvas = document.getElementById('map-canvas');
+  const overlay = document.getElementById('map-labels');
+  const status = document.getElementById('map-status');
+  // A document with no canvas stops here. That is not a failure: the tables
+  // under where the canvas would be already hold every fact it would draw.
+  if (!canvas || typeof canvas.getContext !== 'function') return;
+
+  const token = (mapToken += 1);
+  import('./js/map3d.js')
+    .then((mod) => {
+      // The reader may have moved to another view while three.js was loading,
+      // or come back to this one: only the newest mount may draw.
+      if (token !== mapToken || !document.getElementById('map-canvas')) return;
+      mapController = mod.createMap({
+        canvas,
+        overlay,
+        model: mapScene || mapModel(),
+        onHover: (node) => paintMapPanel(node),
+        onSelect: (node) => paintMapPanel(node)
+      });
+      for (const input of document.querySelectorAll('input[data-layer]')) {
+        input.addEventListener('change', () => {
+          if (mapController) mapController.setLayerVisible(input.dataset.layer, input.checked);
+        });
+      }
+      const counts = mapController.counts;
+      if (status) {
+        status.textContent = `${fmtNumber(counts.meshes)} objects, ${fmtNumber(counts.labels)} named, ${
+          counts.reducedMotion ? 'motion held still because the reader asked for less of it' : `${fmtNumber(counts.pulses)} pulsing`
+        }.`;
+      }
+    })
+    .catch((error) => {
+      if (token !== mapToken) return;
+      const panel = document.getElementById('map-panel');
+      if (!panel) return;
+      panel.innerHTML = notice(
+        'medium',
+        'The canvas could not start',
+        `<p>This browser drew no canvas, so the picture is missing. Nothing else is: every object, its tone and
+         every fact about it are in the tables below the canvas.</p>
+         <p><code>${esc(error && error.message ? error.message : String(error))}</code></p>`
+      );
+    });
+}
+
+// ---------------------------------------------------------------------------
 // Routing and start-up
 //
 // A route is #/<view>, optionally with ?focus=<row id> to mark one row, or
@@ -1333,6 +1572,7 @@ function viewHarness() {
 
 const RENDERERS = {
   overview: viewOverview,
+  map: viewMap,
   sites: viewSites,
   content: viewContent,
   backlinks: viewBacklinks,
@@ -1378,6 +1618,8 @@ function render() {
   const route = parseHash(window.location.hash);
   state.view = route.view;
   state.focus = route.focus;
+  // Whatever the last view allocated is released before the next one is drawn.
+  teardownMap();
 
   let body;
   try {
@@ -1388,6 +1630,7 @@ function render() {
 
   app.innerHTML = `${loadNotices()}<div class="view" id="view-${esc(route.view)}">${body}</div>`;
   markTabs(route.view);
+  if (route.view === 'map') mountMap();
 
   const title = RENDERERS[route.view] ? route.view : 'overview';
   const workspace = (state.data.workspace && state.data.workspace.workspace) || {};

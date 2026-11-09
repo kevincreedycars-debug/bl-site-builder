@@ -39,7 +39,7 @@ try {
     assert.match(index, /<div id="app"/);
     assert.match(index, /<script type="module" src="script\.js">/);
     assert.match(index, /href="styles\.css"/);
-    for (const view of ['overview', 'sites', 'content', 'backlinks', 'email', 'eeat', 'runs', 'harness']) {
+    for (const view of ['overview', 'map', 'sites', 'content', 'backlinks', 'email', 'eeat', 'runs', 'harness']) {
       assert.ok(index.includes(`data-view="${view}"`), `the tab list should include ${view}`);
     }
     assert.ok(!/<(script|link)[^>]+(src|href)="https?:\/\//i.test(index), 'the page should not load anything from another host');
@@ -59,6 +59,20 @@ try {
     assert.ok(css.length > 4000, 'the stylesheet looks truncated');
     assert.match(css, /prefers-color-scheme/);
     assert.match(css, /@media print/);
+  });
+
+  await check('the map renderer and the copy of three.js are served', async () => {
+    const map = await get('/js/map3d.js');
+    assert.equal(map.status, 200, 'js/map3d.js should be served');
+    const source = await map.text();
+    assert.ok(source.includes('../vendor/three.module.js'), 'the renderer should import the copy in this folder');
+    assert.ok(!/from ['"]https?:/.test(source), 'the renderer must not import from another host');
+
+    const three = await get('/vendor/three.module.js');
+    assert.equal(three.status, 200, 'vendor/three.module.js should be served');
+    const bytes = (await three.arrayBuffer()).byteLength;
+    assert.ok(bytes > 500000, `the vendored three.js looks truncated: ${bytes} bytes`);
+    console.log(`     three.js: ${(bytes / 1024 / 1024).toFixed(2)} MB, from this folder, not a CDN`);
   });
 
   for (const { key, path: file } of DATA_FILES) {
