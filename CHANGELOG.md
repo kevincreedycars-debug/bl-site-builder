@@ -39,8 +39,10 @@ see or run.
 **Notes**
 
 - The page is live at `kevincreedycars-debug.github.io/bl-site-builder`: GitHub
-  Pages, `master`, folder root. Eight of eight live checks passed on the first
-  build, including the vendored library, byte for byte.
+  Pages, `master`, folder root, first build in under a minute. Every file a
+  reader needs answers 200 with a content type a browser will run, and the
+  three.js served over HTTPS hashes to the sha256 in `vendor/README.md`.
+  `npm run live` reports 8 of 8 against that build.
 - The first push failed. `gh` injects its own OAuth token, and that token has no
   `workflow` scope, so GitHub refused a history containing
   `.github/workflows/content-run-daily.yml`. A plain `git push` used the
