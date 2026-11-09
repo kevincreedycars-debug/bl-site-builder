@@ -1,30 +1,38 @@
 # What is here now
 
-Last checked: 2 November 2026, against the seed files in `data/`.
+Last checked: 9 November 2026, against the seed files in `data/`.
 
 ## Working
 
 | Part | State | Proof |
 |---|---|---|
-| Page shell, eight views, hash routing | working | `npm test` draws every view from the real files |
+| Page shell, nine views, hash routing | working | `npm test` draws every view from the real files |
 | The rules in `js/core.js` | working | 37 tests in `tests/core.test.js` |
 | The data files | valid seed data | 9 tests in `tests/data.test.js` |
+| The map's model in `js/scene.js` | working | 14 tests in `tests/scene.test.js` |
+| The map's canvas in `js/map3d.js` | working, unlooked at | 2 tests in `tests/map3d.test.js`; the picture itself needs an eye |
+| Every view survives a missing file | working | 13 tests in `tests/views.test.js`, one of them the map's tables |
 | Static server | working | `npm run serve` |
-| HTTP check | working | `npm run check`, 14 checks |
-| Monitor | working | `npm run monitor` prints 38 items from the seed |
+| HTTP check | working | `npm run check`, 15 checks |
+| Published site | working | `npm run live`, 8 checks against the URL below |
+| Monitor | working | `npm run monitor` prints 44 items from the seed |
 | Secret scan | working | `npm run scan`, and it caught a probe file when tested |
 | Pre-commit hook | working | ran by hand, passes |
 | Harness check | working | `npm run harness`, 9 of 9 checks |
 | Run gate | working | `npm run gate` says no, because no engine is connected |
 | Scheduled run | unexercised | the workflow has never run on GitHub; the gate logic under it has |
 
-57 tests in total: 37 rules, 9 data, 11 rendering.
+75 tests in total: 37 rules, 9 data, 13 views, 14 model, 2 canvas.
+
+Published at `kevincreedycars-debug.github.io/bl-site-builder`, GitHub Pages,
+`master`, folder root. A push is live within about a minute.
 
 What the page shows, from the seed data: five sites, three connected and one
 erroring; fourteen content pieces across ten states; twelve paid placements, two
 of them lost; four sending domains and eight mailboxes, one of them risky; one
-business entity, its sources and six workers; six runs. The attention list comes
-to 38 items, 14 of them high.
+business entity, its sources, twenty-five citation entries and six workers; six
+runs. The attention list comes to 44 items, 15 of them high. The map draws the
+same files as 66 objects across six layers.
 
 ## Not built
 
@@ -43,11 +51,11 @@ to 38 items, 14 of them high.
 
 ## The gap that matters
 
-The dashboard is a faithful picture of eleven seed files. It is not yet a
-picture of anything real. The distance between those two is one run that
-replaces a file: `data/sites.json` written by a connection, not by a fixture.
-Until that happens, every number on the page is an example, and the page says so
-in the header whenever a file is older than a day.
+The dashboard is a faithful picture of ten seed files. It is not yet a picture of
+anything real. The distance between those two is one run that replaces a file:
+`data/sites.json` written by a connection, not by a fixture. Until that happens,
+every number on the page is an example, and the page says so in the header
+whenever a file is older than a day.
 
 ## Housekeeping
 

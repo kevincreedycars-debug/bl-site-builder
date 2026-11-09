@@ -34,6 +34,9 @@ see or run.
   import is found before a browser finds it.
 - `npm run live` asks the published site the same questions, and fails unless the
   three.js it serves has the sha256 that `vendor/README.md` records.
+- `docs/CURRENT_STATE.md` said eight views and 57 tests. It now says nine views,
+  75 tests, 15 HTTP checks, 44 attention items and the published URL, which is
+  what the files say.
 - `DECISIONS.md` D11: the map is a view of a model, and three.js is copied in.
 
 **Notes**
