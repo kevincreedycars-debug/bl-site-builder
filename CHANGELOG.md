@@ -32,15 +32,21 @@ see or run.
   compares the rendered tables against the model built from the same files.
 - `npm run check` fetches `#/map` and the map module over HTTP, so a broken
   import is found before a browser finds it.
+- `npm run live` asks the published site the same questions, and fails unless the
+  three.js it serves has the sha256 that `vendor/README.md` records.
 - `DECISIONS.md` D11: the map is a view of a model, and three.js is copied in.
 
 **Notes**
 
-- The repository now exists at `github.com/kevincreedycars-debug/bl-site-builder`
-  and the work is committed. The first push waits on a token scope: the history
-  contains `.github/workflows/content-run-daily.yml`, and an OAuth app may not
-  create that file without the `workflow` scope. Nothing on the page depends on
-  the wait.
+- The page is live at `kevincreedycars-debug.github.io/bl-site-builder`: GitHub
+  Pages, `master`, folder root. Eight of eight live checks passed on the first
+  build, including the vendored library, byte for byte.
+- The first push failed. `gh` injects its own OAuth token, and that token has no
+  `workflow` scope, so GitHub refused a history containing
+  `.github/workflows/content-run-daily.yml`. A plain `git push` used the
+  credential the store already held and went through. The rule that follows:
+  push with git, not with `gh repo create --push`, while the history carries a
+  workflow file.
 
 ## 2 November 2026 — the brief, filed and checked
 

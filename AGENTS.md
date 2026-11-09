@@ -45,13 +45,26 @@ holds every rule worth testing. `data/*.json` is the only input.
     npm test        the node tests. 75 of them, about a third of a second
     npm run check   serves the folder and fetches its own files over HTTP
     npm run serve   a local server on http://127.0.0.1:4173
+    npm run live    asks the published site the same questions as npm run check
     npm run harness the register, the assignments and the template still agree
     npm run gate    may a scheduled run start, and did the last one finish
     npm run monitor what is asking for a person, from the files as they are
     npm run scan    a coarse net for anything shaped like a credential
 
 `npm test` is the gate. `npm run check` is the proof that the page can actually
-load, which the tests cannot show because they build their own DOM.
+load, which the tests cannot show because they build their own DOM. `npm run
+live` asks the same questions of the published site, and checks that the
+three.js it serves is the copy `vendor/README.md` records. It is not part of the
+gate because it needs a network.
+
+## Where it is published
+
+    https://kevincreedycars-debug.github.io/bl-site-builder/
+
+GitHub Pages, from the `master` branch, at the root of the folder. A push to
+`master` is live within about a minute, which is the same promise as a reload
+here: no build, nothing to deploy. `npm run live` after a push says whether the
+published files are the ones this folder holds.
 
 ## Before a commit
 

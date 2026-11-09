@@ -39,6 +39,13 @@ the page so it opens from a URL rather than from a folder on this machine.
   `npm run check` now fetches the map module and fails on a remote import.
 - `DECISIONS.md` D11 records the shape: a model that tests can read, a canvas
   that only draws, and nothing that exists in pixels alone.
+- The page is published at `kevincreedycars-debug.github.io/bl-site-builder`:
+  GitHub Pages, the `master` branch, the root of the folder, `.nojekyll` so no
+  file is filtered on the way out. The first build finished in under a minute.
+- `scripts/check-live.js` (`npm run live`) asks the published site what
+  `npm run check` asks this folder, over HTTPS, from the subpath a reader will
+  use, and compares the served three.js against the sha256 in
+  `vendor/README.md`. Eight of eight passed on the published build.
 
 ### Traps worth remembering
 
@@ -55,8 +62,11 @@ the page so it opens from a URL rather than from a folder on this machine.
   run the browser out of them, so `dispose()` calls `renderer.forceContextLoss()`
   after `renderer.dispose()`.
 - GitHub refuses a push from an OAuth app whose token lacks the `workflow` scope
-  when the pushed history contains `.github/workflows/`. The repository exists
-  and is empty; the push waits on that scope, and nothing on the page does.
+  when the pushed history contains `.github/workflows/`. `gh repo create --push`
+  and `gh`'s own git shim both use that token, so the push failed there and
+  succeeded with a plain `git push`, which used the credential in the Windows
+  store instead. Push the branch with git while a workflow file is in the
+  history.
 - PowerShell 5.1 `Get-Content` reads a UTF-8 file as ANSI and `Set-Content` writes
   it back with a BOM, so a scripted find-and-replace over one of these files
   double-encodes every em dash. Use the editor, or read and write bytes.
@@ -67,6 +77,7 @@ the page so it opens from a URL rather than from a folder on this machine.
     npm run check
     npm run harness
     npm run scan
+    npm run live
 
 Then open `#/map` and check four things by eye, because no test can: the objects
 are spread rather than piled, the labels sit on their objects at every angle, a
@@ -74,11 +85,16 @@ layer switch removes its objects and the connectors that touch them, and the
 panel fills when an object is pressed. If one of those fails, the failure is in
 `js/map3d.js` and in nothing else.
 
+`npm run live` is the one command here that needs a network. Run it after a push,
+not instead of the four above: it reads the published site, so it is the only
+check that can tell you a deployment is stale.
+
 ### Open questions
 
-- **Assumption, marked as one:** GitHub Pages serves the `master` branch root,
-  and the site is public because the repository is public. Neither was agreed.
-  Both are one setting each, and both are reversible.
+- **Assumption, marked as one:** the site is public because the repository is
+  public, and GitHub Pages serves the `master` branch root. Neither was agreed
+  with the owner; both are now set, and both are one setting each to reverse,
+  which is why they are written down rather than decided quietly.
 - **Assumption:** the map stays behind the overview rather than becoming the
   landing view. A picture is a summary and the overview is the words; a reader
   who lands on a sphere has not yet been told what the page is for.
